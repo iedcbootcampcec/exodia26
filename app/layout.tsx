@@ -5,7 +5,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export const metadata: Metadata = {
   title: {
-    default: "Exodia '26 | All Kerala Tech Gala",
+    default: "Exodia '26",
     template: "%s | Exodia '26",
   },
   description:

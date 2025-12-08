@@ -45,10 +45,12 @@
 .logoWrapper {
   position: relative;
   margin-bottom: 3rem;
+  padding: 0 1rem;
 }
 
 .logo {
   width: 180px;
+  max-width: 60vw;
   height: auto;
   filter: drop-shadow(0 0 5px var(--color-primary));
   position: relative;
@@ -88,8 +90,10 @@
 /* Progress Bar */
 .progressContainer {
   width: 300px;
+  max-width: calc(100vw - 100px);
   margin-bottom: 1rem;
   position: relative;
+  padding: 0 1rem;
 }
 
 .progressBarFrame {
@@ -127,19 +131,23 @@
   right: -50px;
   top: 0;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
   text-shadow: 0 0 5px var(--color-primary);
+  white-space: nowrap;
 }
 
 /* Terminal Text */
 .terminalText {
-  height: 1.5rem;
-  font-size: 0.9rem;
+  height: auto;
+  min-height: 1.5rem;
+  font-size: clamp(0.7rem, 2.5vw, 0.9rem);
   letter-spacing: 1px;
   color: var(--color-text-dim);
   text-transform: uppercase;
   text-align: center;
-  min-width: 300px;
+  max-width: 90vw;
+  padding: 0 1rem;
+  line-height: 1.5;
 }
 
 .cursor {
@@ -182,5 +190,72 @@
   100% {
     opacity: 0;
     transform: translate(0);
+  }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .logoWrapper {
+    margin-bottom: 2rem;
+  }
+
+  .logo {
+    width: 140px;
+  }
+
+  .progressContainer {
+    width: 250px;
+    max-width: calc(100vw - 80px);
+  }
+
+  .progressBarFrame {
+    height: 16px;
+  }
+
+  .percentage {
+    right: -45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoWrapper {
+    margin-bottom: 1.5rem;
+  }
+
+  .logo {
+    width: 120px;
+  }
+
+  .progressContainer {
+    width: 200px;
+    max-width: calc(100vw - 60px);
+  }
+
+  .progressBarFrame {
+    height: 14px;
+  }
+
+  .percentage {
+    right: -40px;
+    font-size: 0.9rem;
+  }
+
+  .cursor {
+    width: 6px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .progressContainer {
+    max-width: calc(100vw - 70px);
+  }
+
+  .percentage {
+    position: relative;
+    right: auto;
+    margin-top: 0.5rem;
+    display: block;
+    text-align: center;
   }
 }

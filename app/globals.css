@@ -1,3 +1,18 @@
+@font-face {
+  font-family: "Vipnagorgialla";
+  src: url("/fonts/Vipnagorgialla.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Spin Cycle";
+  src: url("/fonts/spin-cycle.TTF") format("truetype");
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Variable.ttf") format("truetype");
+}
+
 :root {
   --color-bg: #050005;
   --nav-bg-gradient: linear-gradient(

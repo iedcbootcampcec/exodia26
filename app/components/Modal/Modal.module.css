@@ -1,0 +1,84 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  /* backdrop-filter removed for performance on mobile */
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  will-change: opacity;
+}
+
+.overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: var(--color-bg);
+  border: 1px solid var(--color-primary);
+  box-shadow: 0 0 30px rgba(var(--color-primary-rgb), 0.2);
+  padding: 2.5rem;
+  border-radius: 16px;
+  position: relative;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--color-text);
+  will-change: transform;
+}
+
+.modal.visible {
+  transform: translateY(0) scale(1);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-dim);
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 0.5;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.1);
+  transform: rotate(90deg);
+}
+
+.content {
+  margin-top: 1rem;
+}
+
+/* Scrollbar for modal content */
+.modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+}

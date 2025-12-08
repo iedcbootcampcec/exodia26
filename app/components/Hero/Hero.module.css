@@ -1,0 +1,168 @@
+.heroContainer {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-bg);
+  overflow: hidden;
+  padding-top: 4rem; /* Space for potential navbar */
+}
+
+/* Background Planet Glow */
+.planetGlow {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  height: 80vw;
+  max-width: 800px;
+  max-height: 800px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 60, 0.15) 0%,
+    rgba(5, 0, 5, 0) 70%
+  );
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.planetGlow::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 60, 0.2) 0%,
+    rgba(5, 0, 5, 0) 60%
+  );
+  border-radius: 50%;
+  filter: blur(40px);
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 1rem;
+  margin-bottom: 10vh; /* Push content up slightly to clear buildings */
+}
+
+.logoContainer {
+  margin-bottom: 1.5rem;
+  animation: float 6s ease-in-out infinite;
+}
+
+.logo {
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 0 20px rgba(255, 0, 60, 0.4));
+}
+
+.headingImage {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 15px rgba(255, 0, 60, 0.5));
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.05em;
+  margin-bottom: 5.5rem;
+  max-width: 600px;
+}
+
+.ctaContainer {
+  margin-top: 1rem;
+}
+
+/* Skyline Styles */
+.skylineWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Fill the hero section */
+  z-index: 1; /* Lower z-index to be behind content */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.skylineSvg {
+  width: 100%;
+  height: auto;
+  max-height: 40vh;
+  min-height: 200px;
+  display: block;
+}
+
+.overlayGradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to top, var(--color-bg) 0%, transparent 100%);
+  z-index: 6;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+  .logo {
+    width: 160px;
+  }
+
+  .title {
+    font-size: 5rem;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .planetGlow {
+    top: -30%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo {
+    width: 200px;
+  }
+
+  .title {
+    font-size: 7rem;
+  }
+
+  .skylineSvg {
+    max-height: 50vh;
+  }
+}

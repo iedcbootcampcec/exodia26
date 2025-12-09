@@ -21,7 +21,7 @@ const stacks = [
   {
     id: 2,
     number: "02",
-    title: "DATA SCIENCE & ML",
+    title: "DATA SCIENCE WITH ML",
     image: "/stack/data-science-ml.webp",
   },
   {

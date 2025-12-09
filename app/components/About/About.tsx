@@ -203,7 +203,7 @@ const About = () => {
                   MULEARN CHN
                 </span>
                 , in collaboration with Notion, are offering hands-on workshops
-                in Robotics, Artificial Intelligence, and Computer Vision. Led
+                in Robotics, Data Science with ML, and Computer Vision. Led
                 by expert mentors,{" "}
                 <span className={styles.highlight}>Exodia 3.0</span> will
                 provide valuable insights, networking opportunities, and inspire

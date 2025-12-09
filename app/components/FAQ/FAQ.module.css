@@ -54,7 +54,7 @@
 .highlight {
   color: var(--color-primary);
   -webkit-text-stroke: 5px transparent;
-  text-shadow: 0 0 5px var(--color-primary);
+  text-shadow: 0 0 2px var(--color-primary);
 }
 
 .faqContainer {

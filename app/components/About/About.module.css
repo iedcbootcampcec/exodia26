@@ -135,7 +135,7 @@
   text-transform: uppercase;
   display: flex;
   flex-direction: column;
-  filter: drop-shadow(0 0 15px rgba(var(--color-primary-rgb), 0.4));
+  filter: drop-shadow(0 0 0.5px rgba(var(--color-primary-rgb), 0.4));
   position: relative;
 }
 
@@ -150,8 +150,8 @@
   font-size: 6rem;
   display: block;
   color: var(--color-primary);
-  -webkit-text-stroke: 2px transparent;
-  text-shadow: 0 0 2px var(--color-primary);
+  -webkit-text-stroke: 0.5px transparent;
+  text-shadow: 0 0 0.5px var(--color-primary);
 }
 
 .heading::after {
@@ -163,7 +163,7 @@
   height: 4px;
   background: var(--color-primary);
   margin-top: 2rem;
-  box-shadow: 0 0 10px var(--color-primary);
+  box-shadow: 0 0 0.5px var(--color-primary);
 }
 
 .infoWrapper {

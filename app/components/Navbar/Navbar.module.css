@@ -88,8 +88,29 @@
   box-shadow: 0 0 5px var(--color-text-dim);
 }
 
+@media screen and (min-width: 769px) {
+  .navLink,
+  .logoImage {
+    cursor: pointer;
+  }
+
+  .navLink::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--color-primary);
+  }
+  .navLink:hover::after {
+    width: 100%;
+    transition: width 0.3s ease;
+  }
+}
+
 /* Mobile Styles */
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .navContainer {
     align-items: center;
   }

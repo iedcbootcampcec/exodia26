@@ -113,7 +113,7 @@ const Footer = () => {
             </button>
           </div>
         </div>
-        <div className={`${styles.bottomBar} ${styles.createdByBar}`}>
+        {/* <div className={`${styles.bottomBar} ${styles.createdByBar}`}>
           <div className={styles.createdBy} onClick={handleHeartClick}>
             Made With{" "}
             <FaHeart
@@ -122,7 +122,7 @@ const Footer = () => {
             />{" "}
             by Team Exodia
           </div>
-        </div>
+        </div> */}
       </div>
 
       <Modal isVisible={isModalOpen} onClose={() => setIsModalOpen(false)}>

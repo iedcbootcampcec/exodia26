@@ -7,122 +7,122 @@
   z-index: -1;
   pointer-events: none;
   overflow: hidden;
+  background: #0a0a0a;
+  /* Force GPU layer - single composite layer for whole background */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
-/* Morphing primary orbs */
-.orb1,
-.orb2,
-.orb3 {
-  position: absolute;
-  filter: blur(100px);
-  opacity: 0.5;
-  transition: border-radius 0.1s ease;
-}
-
-.orb1 {
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(
-    circle,
-    rgba(131, 11, 7, 0.4) 0%,
-    transparent 70%
-  );
-  top: calc(-20% + (var(--scroll-progress, 0) * 80%));
-  left: calc(-15% + (var(--scroll-progress, 0) * 40%));
-  /* Morphing shape based on scroll */
-  border-radius: calc(50% - (var(--scroll-progress, 0) * 20%))
-    calc(30% + (var(--scroll-progress, 0) * 30%))
-    calc(60% - (var(--scroll-progress, 0) * 10%))
-    calc(40% + (var(--scroll-progress, 0) * 25%));
-  transform: rotate(calc(var(--scroll-progress, 0) * 45deg))
-    scale(calc(1 + (var(--scroll-progress, 0) * 0.3)));
-}
-
-.orb2 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(
-    circle,
-    rgba(131, 11, 7, 0.35) 0%,
-    transparent 70%
-  );
-  bottom: calc(-10% + (var(--scroll-progress, 0) * 50%));
-  right: calc(-20% + (var(--scroll-progress, 0) * 35%));
-  /* Different morph pattern */
-  border-radius: calc(40% + (var(--scroll-progress, 0) * 25%))
-    calc(60% - (var(--scroll-progress, 0) * 15%))
-    calc(35% + (var(--scroll-progress, 0) * 20%))
-    calc(55% - (var(--scroll-progress, 0) * 10%));
-  transform: rotate(calc(var(--scroll-progress, 0) * -60deg))
-    scale(calc(0.8 + (var(--scroll-progress, 0) * 0.5)));
-}
-
-.orb3 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(
-    circle,
-    rgba(131, 11, 7, 0.3) 0%,
-    transparent 70%
-  );
-  top: calc(30% + (var(--scroll-progress, 0) * 60%));
-  left: calc(50% - (var(--scroll-progress, 0) * 50%));
-  /* More extreme morph */
-  border-radius: calc(30% + (var(--scroll-progress, 0) * 40%))
-    calc(70% - (var(--scroll-progress, 0) * 30%))
-    calc(45% + (var(--scroll-progress, 0) * 20%))
-    calc(55% - (var(--scroll-progress, 0) * 25%));
-  transform: rotate(calc(var(--scroll-progress, 0) * 90deg))
-    scale(calc(1.2 - (var(--scroll-progress, 0) * 0.4)));
-}
-
-/* Grid that shifts */
-.gridOverlay {
+/* Main ambient glow - static, no scroll animation */
+.ambientGlow {
   position: absolute;
   top: 0;
   left: 0;
-  width: 200%;
-  height: 200%;
-  background-image: linear-gradient(rgba(131, 11, 7, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(131, 11, 7, 0.03) 1px, transparent 1px);
-  background-size: 80px 80px;
-  opacity: calc(0.2 + (var(--scroll-progress, 0) * 0.6));
-  transform: translate(
-      calc(var(--scroll-progress, 0) * -50px),
-      calc(var(--scroll-progress, 0) * -50px)
-    )
-    rotate(calc(var(--scroll-progress, 0) * 5deg));
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(131, 11, 7, 0.15) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 100% 100%,
+      rgba(131, 11, 7, 0.12) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 0% 80%,
+      rgba(131, 11, 7, 0.1) 0%,
+      transparent 40%
+    );
+  will-change: opacity;
+  opacity: calc(0.6 + (var(--scroll-progress, 0) * 0.4));
 }
 
-/* Noise */
+/* Optimized orbs - smaller sizes, no blur filter */
+.orb1,
+.orb2 {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, opacity;
+  /* Use actual gradients instead of blur filter */
+  background: radial-gradient(
+    circle,
+    rgba(131, 11, 7, 0.35) 0%,
+    rgba(131, 11, 7, 0.15) 30%,
+    transparent 70%
+  );
+}
+
+.orb1 {
+  width: 500px;
+  height: 500px;
+  top: -150px;
+  left: -100px;
+  opacity: calc(0.5 + (var(--scroll-progress, 0) * 0.3));
+  transform: translate3d(
+    calc(var(--scroll-progress, 0) * 80px),
+    calc(var(--scroll-progress, 0) * 150px),
+    0
+  );
+}
+
+.orb2 {
+  width: 450px;
+  height: 450px;
+  bottom: -100px;
+  right: -80px;
+  opacity: calc(0.4 + (var(--scroll-progress, 0) * 0.4));
+  transform: translate3d(
+    calc(var(--scroll-progress, 0) * -60px),
+    calc(var(--scroll-progress, 0) * -100px),
+    0
+  );
+}
+
+/* Optimized noise - smaller SVG, lower opacity */
 .noise {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  pointer-events: none;
 }
 
-/* Responsive */
+/* Mobile - even lighter effects */
 @media (max-width: 768px) {
   .orb1 {
-    width: 450px;
-    height: 450px;
+    width: 300px;
+    height: 300px;
+    top: -80px;
+    left: -60px;
   }
 
   .orb2 {
-    width: 400px;
-    height: 400px;
+    width: 280px;
+    height: 280px;
   }
 
-  .orb3 {
-    width: 350px;
-    height: 350px;
+  .ambientGlow {
+    background: radial-gradient(
+        ellipse 100% 50% at 50% 0%,
+        rgba(131, 11, 7, 0.12) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse 80% 40% at 100% 100%,
+        rgba(131, 11, 7, 0.1) 0%,
+        transparent 40%
+      );
   }
 
-  .gridOverlay {
-    background-size: 50px 50px;
+  .noise {
+    opacity: 0.02;
+    background-size: 150px 150px;
   }
 }

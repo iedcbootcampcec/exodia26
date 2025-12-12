@@ -9,16 +9,16 @@ import Footer from "./components/Footer/Footer";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 import ScrollBackground from "./components/Background/ScrollBackground";
 
-const Images =[
+const Images = [
   "/exodia_logo.svg",
   "/assets/red-planet.webp",
   "/assets/city-center.webp",
   "/assets/city-left.webp",
   "/assets/city-right.webp",
-]
+];
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const preloadImages = () => {
@@ -39,7 +39,7 @@ function App() {
     };
 
     preloadImages();
-  }, [])
+  }, []);
 
   return (
     <>

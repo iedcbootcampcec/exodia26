@@ -29,8 +29,8 @@
     #05000577,
     transparent
   );
-  --color-primary: #830B07;
-  --color-primary-glow: #830B07;
+  --color-primary: #830b07;
+  --color-primary-glow: #830b07;
   --color-text: #ffffff;
   --color-text-dim: #a0a0a0;
   --color-accent: #ebac42;
@@ -39,6 +39,16 @@
   --color-white: #ffffff;
   --color-white-rgb: 255, 255, 255;
   --color-primary-rgb: 255, 0, 60;
+  --color-accent-rgb: 235, 172, 66;
+
+  --color-gold-light: #ffcc33;
+  --color-gold-dark: #e6b800;
+
+  --color-card-bg-start: #0a0505;
+  --color-card-bg-end: #1a0a0a;
+
+  --color-orange-gradient-start: #ffcc00;
+  --color-orange-gradient-end: #ff6600;
 
   --font-heading: "Spin Cycle", sans-serif;
   --font-body: "Vipnagorgialla", sans-serif;
@@ -53,6 +63,18 @@
 
 body {
   background-color: var(--color-bg);
+  /* Rich continuous background */
+  background-image: radial-gradient(
+      circle at 50% 50%,
+      rgba(30, 0, 10, 0.4) 0%,
+      transparent 60%
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100vw 100vh, 50px 50px, 50px 50px;
+  background-position: center, center top, center top;
+  background-attachment: fixed;
+
   color: var(--color-text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;

@@ -1,31 +1,14 @@
 .faqSection {
-  padding: 4rem 2rem;
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  padding: 8rem 2rem;
+  background-color: transparent;
+  color: var(--color-white);
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  overflow: hidden;
 }
 
-.gridBackground {
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(
-      rgba(var(--color-white-rgb), 0.03) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(var(--color-white-rgb), 0.03) 1px,
-      transparent 1px
-    );
-  background-size: 40px 40px;
-  z-index: 0;
-  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-  pointer-events: none;
-}
+/* .gridBackground removed to use global continuous grid */
 
 .glowBackground {
   position: absolute;
@@ -34,101 +17,125 @@
   transform: translate(-50%, -50%);
   width: 800px;
   height: 800px;
-  background: radial-gradient(circle, rgba(255, 0, 60, 0.15) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 60, 0.15) 0%,
+    transparent 70%
+  );
   filter: blur(60px);
   z-index: 0;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 15%,
+    black 85%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 15%,
+    black 85%,
+    transparent
+  );
   pointer-events: none;
 }
 
 .heading {
   font-family: var(--font-heading);
-  font-size: 3rem;
-  margin-bottom: 3rem;
+  font-size: 3.5rem;
+  margin-bottom: 4rem;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  position: relative;
-  z-index: 1;
-}
-
-.highlight {
-  color: var(--color-primary);
-  -webkit-text-stroke: 0.5px transparent;
-  text-shadow: 0 0 0.5px var(--color-primary);
+  letter-spacing: 0.1em;
+  background: linear-gradient(
+    to right,
+    var(--color-orange-gradient-start),
+    var(--color-orange-gradient-end)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(
+    0 0 10px
+      color-mix(in srgb, var(--color-orange-gradient-start), transparent 70%)
+  );
+  width: 100%;
 }
 
 .faqContainer {
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  position: relative;
-  z-index: 1;
+  gap: 1.5rem;
+  z-index: 2;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1; /* Reset to natural state, but we have hover transforms so maybe just opacity and let transform be handled by default state? */
+    transform: translateY(0);
+  }
 }
 
 .faqItem {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  overflow: hidden;
-  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  /* The shape: Tab on top-left */
+  clip-path: polygon(0 0, 180px 0, 200px 15px, 100% 15px, 100% 100%, 0 100%);
+  background: transparent;
+  padding: 1px; /* Serves as border width */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  /* backdrop-filter removed for performance on mobile */
-  transform: translateZ(0);
+  /* Simple entrance animation since GSAP is removed */
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0; /* Start hidden for animation */
+  animation-delay: 0.1s; /* Basic delay, or we can rely on React to stagger if we add inline styles */
 }
 
-.faqItem:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
-}
+/* ... existing .faqItem::before ... */
 
-.faqItem.active {
-  border-color: var(--color-primary);
-  background: rgba(255, 0, 60, 0.05);
-}
-
-.question {
-  padding: 1.5rem;
-  font-family: var(--font-variable);
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-text);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  user-select: none;
-}
-
-.icon {
-  font-family: monospace;
-  font-size: 1.5rem;
-  color: var(--color-primary);
-  font-weight: bold;
-}
+/* ... existing hover effects ... */
 
 .answer {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s ease;
+  opacity: 0.5; /* Fade in slightly from 0.5 to 1 looks nicer than 0 */
   overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-  padding: 0 1.5rem;
-  font-family: var(--font-variable);
-  color: var(--color-text-dim);
-  line-height: 1.6;
-  will-change: max-height;
 }
 
-.faqItem.active .answer {
-  max-height: 500px;
-  padding-bottom: 1.5rem;
+.answer p {
+  min-height: 0;
+  padding: 0 2rem 2rem 2rem; /* Moved padding to inner element */
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  font-family: var(--font-variable);
+  margin: 0; /* accurate spacing */
+}
+
+.active .answer {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+/* Hover effects */
+.faqItem:hover .question {
+  color: var(--color-white);
 }
 
 @media (max-width: 768px) {
-  .heading {
-    font-size: 2rem;
+  .faqItem,
+  .contentWrapper {
+    clip-path: polygon(0 0, 100px 0, 120px 10px, 100% 10px, 100% 100%, 0 100%);
   }
-  
-  .question {
-    font-size: 1rem;
+
+  .heading {
+    font-size: 2.5rem;
   }
 }

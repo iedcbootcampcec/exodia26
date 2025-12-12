@@ -3,7 +3,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FaStarOfLife } from "react-icons/fa";
+
 import { useState } from "react";
 import Modal from "../Modal/Modal";
 import styles from "./About.module.css";
@@ -86,13 +86,13 @@ const About = () => {
       // Content Animation
       gsap.fromTo(
         contentRef.current,
-        { y: 50, opacity: 0 },
+        { x: 50, opacity: 0 },
         {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 70%",
           },
-          y: 0,
+          x: 0,
           opacity: 1,
           duration: 1,
           delay: 0.2,
@@ -100,10 +100,10 @@ const About = () => {
         }
       );
 
-      // Stats Animation - safely check if statsRef exists
+      // Stats Animation
       if (statsRef.current) {
         gsap.fromTo(
-          statsRef.current.children,
+          statsRef.current,
           { y: 30, opacity: 0 },
           {
             scrollTrigger: {
@@ -113,7 +113,6 @@ const About = () => {
             y: 0,
             opacity: 1,
             duration: 0.8,
-            stagger: 0.1,
             delay: 0.4,
             ease: "back.out(1.7)",
           }
@@ -125,93 +124,60 @@ const About = () => {
 
   return (
     <section className={styles.aboutSection} ref={sectionRef} id="about">
-      <div className={styles.gridBackground}></div>
-      <div className={styles.glowOrb}></div>
-
-      {/* Scrolling Marquee */}
-      <div className={styles.marqueeWrapper}>
-        <div className={styles.marqueeTrack}>
-          {[...Array(10)].map((_, i) => (
-            <div className={styles.marqueeItem} key={i}>
-              <img
-                src="/logos/iedcbootcamp.png"
-                alt="IEDC"
-                className={`${styles.marqueeLogo} ${styles.logoIedc}`}
-              />
-              <FaStarOfLife className={styles.starIcon} />
-              <img
-                src="/logos/mulearn.png"
-                alt="Mulearn"
-                className={`${styles.marqueeLogo} ${styles.logoMulearn}`}
-              />
-              <FaStarOfLife className={styles.starIcon} />
-              <img
-                src="/logos/foces.png"
-                alt="FOCES"
-                className={`${styles.marqueeLogo} ${styles.logoFoces}`}
-              />
-              <FaStarOfLife className={styles.starIcon} />
-              <img
-                src="/exodia_logo.svg"
-                alt="Exodia"
-                className={`${styles.marqueeLogo} ${styles.logoExodia}`}
-              />
-              <FaStarOfLife className={styles.starIcon} />
-            </div>
-          ))}
-        </div>
-      </div>
+      <div className={styles.backgroundEffects}></div>
 
       <div className={styles.container}>
         <div className={styles.contentGrid}>
           {/* Left Column: Heading */}
           <div className={styles.headingWrapper} ref={headingRef}>
             <h2 className={styles.heading}>
-              <span className={styles.headingSmall}>WHAT IS</span>
-              <span className={styles.headingLarge}>EXODIA?</span>
+              <span className={styles.headingSmall}>What is</span>
+              <div className={styles.headingLine}>
+                <span className={styles.headingLarge}>exodia</span>
+                <span className={styles.questionMark}>?</span>
+              </div>
             </h2>
           </div>
 
           {/* Right Column: Content & Stats */}
-          <div className={styles.infoWrapper}>
-            <div ref={contentRef}>
+          <div className={styles.rightColumn}>
+            <div className={styles.infoCard} ref={contentRef}>
               <p className={styles.text}>
-                <span className={styles.highlight}>Exodia '26</span>, the
-                all-Kerala tech event, will take place on February 7th and 8th
-                at the College of Engineering Chengannur.
+                Exodia 3.0 brings together innovators from across Kerala for a
+                hands-on technical meet on February 7th and 8th at the College
+                of Engineering Chengannur.
                 <br />
                 <br />
-                This year,{" "}
+                Organised by{" "}
                 <span
-                  className={`${styles.highlight} ${styles.highlight_clickable}`}
+                  className={styles.highlightLink}
                   onClick={() => handleForumClick(0)}
                 >
                   IEDC BOOTCAMP CEC
                 </span>
                 ,{" "}
                 <span
-                  className={`${styles.highlight} ${styles.highlight_clickable}`}
+                  className={styles.highlightLink}
                   onClick={() => handleForumClick(1)}
                 >
                   FOCES CEC
                 </span>
                 , and{" "}
                 <span
-                  className={`${styles.highlight} ${styles.highlight_clickable}`}
+                  className={styles.highlightLink}
                   onClick={() => handleForumClick(2)}
                 >
-                  MULEARN CHN
+                  μLearn CHN
                 </span>
-                , in collaboration with Notion, are offering hands-on workshops
-                in Robotics, Data Science with ML, and Computer Vision. Led
-                by expert mentors,{" "}
-                <span className={styles.highlight}>Exodia 3.0</span> will
-                provide valuable insights, networking opportunities, and inspire
-                innovation.
+                , the event is designed to provide participants with practical
+                exposure through structured learning experiences and
+                collaborative sessions.
                 <br />
                 <br />
-                Join us for this transformative event to shape the future of
-                technology!
+                The event features hands-on workshops in Robotics, Data Science
+                with Machine Learning, and Computer Vision, led by experienced
+                mentors, with an emphasis on skill development, professional
+                networking, and innovation.
               </p>
             </div>
 
@@ -221,12 +187,36 @@ const About = () => {
                 <span className={styles.statNumber}>3</span>
                 <span className={styles.statLabel}>STACKS</span>
               </div>
-              <div className={styles.statDivider}></div>
+
+              <div className={styles.chevronDivider}>
+                <svg viewBox="0 0 24 100" preserveAspectRatio="none">
+                  <polyline
+                    points="0,0 24,50 0,100"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </svg>
+              </div>
+
               <div className={styles.statItem}>
                 <span className={styles.statNumber}>180</span>
                 <span className={styles.statLabel}>STUDENTS</span>
               </div>
-              <div className={styles.statDivider}></div>
+
+              <div className={styles.chevronDivider}>
+                <svg viewBox="0 0 24 100" preserveAspectRatio="none">
+                  <polyline
+                    points="0,0 24,50 0,100"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </svg>
+              </div>
+
               <div className={styles.statItem}>
                 <span className={styles.statNumber}>2</span>
                 <span className={styles.statLabel}>DAYS</span>

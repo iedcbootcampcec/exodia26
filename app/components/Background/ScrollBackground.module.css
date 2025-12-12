@@ -7,13 +7,61 @@
   z-index: -1;
   pointer-events: none;
   overflow: hidden;
-  background: #0a0a0a;
-  /* Force GPU layer - single composite layer for whole background */
-  will-change: transform;
-  transform: translateZ(0);
+  background: var(--color-bg);
 }
 
-/* Main ambient glow - static, no scroll animation */
+/* Floating orbs - very faint and spread out */
+.orb1,
+.orb2,
+.orb3 {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, opacity, background;
+  /* Smooth transitions for color changes */
+  transition: background 3s ease-in-out;
+  background: radial-gradient(
+    circle,
+    rgba(131, 11, 7, 0.15) 0%,
+    rgba(131, 11, 7, 0.08) 30%,
+    rgba(131, 11, 7, 0.02) 50%,
+    transparent 70%
+  );
+}
+
+/* Large primary orb - top left, very spread */
+.orb1 {
+  width: 900px;
+  height: 900px;
+  top: -300px;
+  left: -250px;
+  opacity: 0.4;
+  animation: floatOrb1 40s ease-in-out infinite,
+    colorShift1 30s ease-in-out infinite;
+}
+
+/* Medium orb - bottom right */
+.orb2 {
+  width: 800px;
+  height: 800px;
+  bottom: -250px;
+  right: -200px;
+  opacity: 0.35;
+  animation: floatOrb2 50s ease-in-out infinite,
+    colorShift2 35s ease-in-out infinite;
+}
+
+/* Smaller orb - center drifting */
+.orb3 {
+  width: 700px;
+  height: 700px;
+  top: 35%;
+  left: 25%;
+  opacity: 0.25;
+  animation: floatOrb3 60s ease-in-out infinite,
+    colorShift3 40s ease-in-out infinite;
+}
+
+/* Ambient glow that subtly shifts */
 .ambientGlow {
   position: absolute;
   top: 0;
@@ -21,66 +69,19 @@
   width: 100%;
   height: 100%;
   background: radial-gradient(
-      ellipse 80% 60% at 50% 0%,
-      rgba(131, 11, 7, 0.15) 0%,
+      ellipse 100% 60% at 10% 10%,
+      rgba(131, 11, 7, 0.04) 0%,
       transparent 60%
     ),
     radial-gradient(
-      ellipse 60% 50% at 100% 100%,
-      rgba(131, 11, 7, 0.12) 0%,
+      ellipse 80% 50% at 90% 90%,
+      rgba(131, 11, 7, 0.03) 0%,
       transparent 50%
-    ),
-    radial-gradient(
-      ellipse 50% 40% at 0% 80%,
-      rgba(131, 11, 7, 0.1) 0%,
-      transparent 40%
     );
-  will-change: opacity;
-  opacity: calc(0.6 + (var(--scroll-progress, 0) * 0.4));
+  animation: ambientPulse 25s ease-in-out infinite;
 }
 
-/* Optimized orbs - smaller sizes, no blur filter */
-.orb1,
-.orb2 {
-  position: absolute;
-  border-radius: 50%;
-  will-change: transform, opacity;
-  /* Use actual gradients instead of blur filter */
-  background: radial-gradient(
-    circle,
-    rgba(131, 11, 7, 0.35) 0%,
-    rgba(131, 11, 7, 0.15) 30%,
-    transparent 70%
-  );
-}
-
-.orb1 {
-  width: 500px;
-  height: 500px;
-  top: -150px;
-  left: -100px;
-  opacity: calc(0.5 + (var(--scroll-progress, 0) * 0.3));
-  transform: translate3d(
-    calc(var(--scroll-progress, 0) * 80px),
-    calc(var(--scroll-progress, 0) * 150px),
-    0
-  );
-}
-
-.orb2 {
-  width: 450px;
-  height: 450px;
-  bottom: -100px;
-  right: -80px;
-  opacity: calc(0.4 + (var(--scroll-progress, 0) * 0.4));
-  transform: translate3d(
-    calc(var(--scroll-progress, 0) * -60px),
-    calc(var(--scroll-progress, 0) * -100px),
-    0
-  );
-}
-
-/* Optimized noise - smaller SVG, lower opacity */
+/* Noise texture */
 .noise {
   position: absolute;
   top: 0;
@@ -91,38 +92,222 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
-  pointer-events: none;
 }
 
-/* Mobile - even lighter effects */
+/* ========= KEYFRAME ANIMATIONS ========= */
+
+/* Orb 1: Slow diagonal drift */
+@keyframes floatOrb1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(60px, 40px) scale(1.02);
+  }
+  50% {
+    transform: translate(30px, 80px) scale(0.98);
+  }
+  75% {
+    transform: translate(70px, 30px) scale(1.01);
+  }
+}
+
+/* Orb 2: Opposite diagonal drift */
+@keyframes floatOrb2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    transform: translate(-40px, -60px) scale(1.03);
+  }
+  40% {
+    transform: translate(-70px, -30px) scale(0.97);
+  }
+  60% {
+    transform: translate(-20px, -70px) scale(1.02);
+  }
+  80% {
+    transform: translate(-50px, -40px) scale(0.99);
+  }
+}
+
+/* Orb 3: Gentle figure-8 drift */
+@keyframes floatOrb3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  16% {
+    transform: translate(35px, -25px) scale(1.02);
+  }
+  33% {
+    transform: translate(55px, 20px) scale(0.98);
+  }
+  50% {
+    transform: translate(15px, 40px) scale(1.01);
+  }
+  66% {
+    transform: translate(-25px, 25px) scale(0.99);
+  }
+  83% {
+    transform: translate(-15px, -20px) scale(1.01);
+  }
+}
+
+/* Ultra-smooth color shifts with many steps */
+@keyframes colorShift1 {
+  0%,
+  100% {
+    background: radial-gradient(
+      circle,
+      rgba(131, 11, 7, 0.12) 0%,
+      rgba(131, 11, 7, 0.06) 30%,
+      rgba(131, 11, 7, 0.02) 50%,
+      transparent 70%
+    );
+  }
+  20% {
+    background: radial-gradient(
+      circle,
+      rgba(160, 50, 20, 0.1) 0%,
+      rgba(160, 50, 20, 0.05) 30%,
+      rgba(160, 50, 20, 0.015) 50%,
+      transparent 70%
+    );
+  }
+  40% {
+    background: radial-gradient(
+      circle,
+      rgba(200, 120, 20, 0.08) 0%,
+      rgba(200, 120, 20, 0.04) 30%,
+      rgba(200, 120, 20, 0.01) 50%,
+      transparent 70%
+    );
+  }
+  60% {
+    background: radial-gradient(
+      circle,
+      rgba(180, 80, 10, 0.1) 0%,
+      rgba(180, 80, 10, 0.05) 30%,
+      rgba(180, 80, 10, 0.015) 50%,
+      transparent 70%
+    );
+  }
+  80% {
+    background: radial-gradient(
+      circle,
+      rgba(150, 40, 15, 0.11) 0%,
+      rgba(150, 40, 15, 0.055) 30%,
+      rgba(150, 40, 15, 0.018) 50%,
+      transparent 70%
+    );
+  }
+}
+
+@keyframes colorShift2 {
+  0%,
+  100% {
+    background: radial-gradient(
+      circle,
+      rgba(131, 11, 7, 0.1) 0%,
+      rgba(131, 11, 7, 0.05) 30%,
+      rgba(131, 11, 7, 0.015) 50%,
+      transparent 70%
+    );
+  }
+  25% {
+    background: radial-gradient(
+      circle,
+      rgba(180, 100, 50, 0.08) 0%,
+      rgba(180, 100, 50, 0.04) 30%,
+      rgba(180, 100, 50, 0.012) 50%,
+      transparent 70%
+    );
+  }
+  50% {
+    background: radial-gradient(
+      circle,
+      rgba(220, 160, 80, 0.06) 0%,
+      rgba(220, 160, 80, 0.03) 30%,
+      rgba(220, 160, 80, 0.01) 50%,
+      transparent 70%
+    );
+  }
+  75% {
+    background: radial-gradient(
+      circle,
+      rgba(160, 60, 30, 0.09) 0%,
+      rgba(160, 60, 30, 0.045) 30%,
+      rgba(160, 60, 30, 0.014) 50%,
+      transparent 70%
+    );
+  }
+}
+
+@keyframes colorShift3 {
+  0%,
+  100% {
+    background: radial-gradient(
+      circle,
+      rgba(131, 11, 7, 0.08) 0%,
+      rgba(131, 11, 7, 0.04) 30%,
+      rgba(131, 11, 7, 0.012) 50%,
+      transparent 70%
+    );
+  }
+  33% {
+    background: radial-gradient(
+      circle,
+      rgba(200, 140, 40, 0.06) 0%,
+      rgba(200, 140, 40, 0.03) 30%,
+      rgba(200, 140, 40, 0.01) 50%,
+      transparent 70%
+    );
+  }
+  66% {
+    background: radial-gradient(
+      circle,
+      rgba(170, 70, 25, 0.07) 0%,
+      rgba(170, 70, 25, 0.035) 30%,
+      rgba(170, 70, 25, 0.011) 50%,
+      transparent 70%
+    );
+  }
+}
+
+/* Very subtle ambient pulse */
+@keyframes ambientPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ========= RESPONSIVE ========= */
 @media (max-width: 768px) {
   .orb1 {
-    width: 300px;
-    height: 300px;
-    top: -80px;
-    left: -60px;
+    width: 500px;
+    height: 500px;
+    top: -150px;
+    left: -120px;
   }
 
   .orb2 {
-    width: 280px;
-    height: 280px;
+    width: 450px;
+    height: 450px;
   }
 
-  .ambientGlow {
-    background: radial-gradient(
-        ellipse 100% 50% at 50% 0%,
-        rgba(131, 11, 7, 0.12) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        ellipse 80% 40% at 100% 100%,
-        rgba(131, 11, 7, 0.1) 0%,
-        transparent 40%
-      );
+  .orb3 {
+    width: 400px;
+    height: 400px;
   }
 
   .noise {
     opacity: 0.02;
-    background-size: 150px 150px;
   }
 }

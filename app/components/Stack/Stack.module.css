@@ -336,7 +336,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .stackSection {
     padding: 4rem 1rem;
   }
@@ -364,5 +364,9 @@
 
   .modalList li {
     font-size: 0.9rem;
+  }
+
+  .modalImage {
+    filter: drop-shadow(0 0 10px rgba(255, 204, 128, 0.2));
   }
 }

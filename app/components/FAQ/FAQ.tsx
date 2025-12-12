@@ -91,7 +91,6 @@ const FAQCardBackground = ({
 
     // Ensure tab doesn't exceed width
     const safeTabWidth = Math.min(width - slant, tabWidth);
-
     // Path definition:
     // 1. Start top-left (0,0)
     // 2. Line to end of tab top (safeTabWidth, 0)

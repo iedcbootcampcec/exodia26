@@ -47,7 +47,7 @@ function App() {
         <LoadingScreen onComplete={() => setIsLoading(false)} />
       ) : (
         <>
-          <ScrollBackground />
+          {/* <ScrollBackground /> */}
           <Navbar />
           <Hero />
           <About />

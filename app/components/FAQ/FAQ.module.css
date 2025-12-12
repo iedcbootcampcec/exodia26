@@ -8,8 +8,6 @@
   position: relative;
 }
 
-/* .gridBackground removed to use global continuous grid */
-
 .glowBackground {
   position: absolute;
   top: 50%;
@@ -24,20 +22,6 @@
   );
   filter: blur(60px);
   z-index: 0;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 15%,
-    black 85%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 15%,
-    black 85%,
-    transparent
-  );
   pointer-events: none;
 }
 
@@ -72,51 +56,79 @@
   z-index: 2;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1; /* Reset to natural state, but we have hover transforms so maybe just opacity and let transform be handled by default state? */
-    transform: translateY(0);
-  }
-}
-
 .faqItem {
   position: relative;
-  /* The shape: Tab on top-left */
-  clip-path: polygon(0 0, 180px 0, 200px 15px, 100% 15px, 100% 100%, 0 100%);
   background: transparent;
-  padding: 1px; /* Serves as border width */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
   cursor: pointer;
-  /* Simple entrance animation since GSAP is removed */
-  animation: fadeInUp 0.5s ease-out forwards;
-  opacity: 0; /* Start hidden for animation */
-  animation-delay: 0.1s; /* Basic delay, or we can rely on React to stagger if we add inline styles */
+  /* Removed clip-path to use SVG background */
 }
 
-/* ... existing .faqItem::before ... */
+.svgBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  transition: all 0.3s ease;
+}
 
-/* ... existing hover effects ... */
+/* Glow effect on hover handled by SVG stroke, or could add filter drop-shadow here */
+.faqItem:hover .svgBackground {
+  filter: drop-shadow(0 0 5px rgba(255, 138, 0, 0.3));
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem 2rem;
+  padding-top: 2.5rem; /* Clear the top tab */
+}
+
+.question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.3s ease;
+}
+
+.faqItem:hover .question {
+  color: var(--color-white);
+  text-shadow: 0 0 8px rgba(255, 138, 0, 0.5);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--color-orange-gradient-end);
+}
+
+.iconRotate {
+  transform: rotate(180deg);
+}
 
 .answer {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.4s ease;
-  opacity: 0.5; /* Fade in slightly from 0.5 to 1 looks nicer than 0 */
+    opacity 0.4s ease, padding-top 0.4s ease;
+  opacity: 0.5;
   overflow: hidden;
 }
 
-.answer p {
+.answerInner {
   min-height: 0;
-  padding: 0 2rem 2rem 2rem; /* Moved padding to inner element */
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.6;
   font-family: var(--font-variable);
-  margin: 0; /* accurate spacing */
+  padding-top: 1rem;
 }
 
 .active .answer {
@@ -124,18 +136,13 @@
   opacity: 1;
 }
 
-/* Hover effects */
-.faqItem:hover .question {
-  color: var(--color-white);
-}
-
 @media (max-width: 768px) {
-  .faqItem,
-  .contentWrapper {
-    clip-path: polygon(0 0, 100px 0, 120px 10px, 100% 10px, 100% 100%, 0 100%);
+  .heading {
+    font-size: 2.2rem;
   }
 
-  .heading {
-    font-size: 2.5rem;
+  .contentWrapper {
+    padding: 1.2rem;
+    padding-top: 2.2rem;
   }
 }

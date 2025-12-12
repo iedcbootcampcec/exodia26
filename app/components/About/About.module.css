@@ -221,7 +221,7 @@
 }
 
 .statNumber {
-  font-family: var(--font-heading);
+  font-family: var(--font-variable);
   font-size: 4.5rem;
   font-weight: 900;
   color: transparent;

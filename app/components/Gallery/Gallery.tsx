@@ -74,22 +74,22 @@ const Gallery = () => {
 
   useGSAP(
     () => {
-      // Title typewriter animation
+      // Per-letter staggered reveal - GPU optimized
       if (titleRef.current) {
-        gsap.fromTo(
-          titleRef.current,
-          { text: "" },
-          {
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 80%",
-              end: "top 40%",
-              scrub: 1,
-            },
-            text: "THE EXPERIENCE",
-            ease: "none",
-          }
-        );
+        const letters = titleRef.current.querySelectorAll("span");
+        gsap.set(letters, { opacity: 0 });
+
+        gsap.to(letters, {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "top 40%",
+            scrub: 1,
+          },
+          opacity: 1,
+          stagger: 0.03,
+          ease: "none",
+        });
       }
 
       // Subtitle fade in
@@ -126,7 +126,16 @@ const Gallery = () => {
       <div className={styles.bgText}>2.0</div>
 
       <div className={styles.header} ref={headingRef}>
-        <h2 className={styles.title} ref={titleRef}></h2>
+        <h2 className={styles.title} ref={titleRef}>
+          {"THE EXPERIENCE".split("").map((char, i) => (
+            <span
+              key={i}
+              style={{ display: char === " " ? "inline" : "inline-block" }}
+            >
+              {char === " " ? "\u00A0" : char}
+            </span>
+          ))}
+        </h2>
         <p className={styles.subtitle}>Moments from Previous Editions</p>
       </div>
 

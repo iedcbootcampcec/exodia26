@@ -45,7 +45,7 @@
 
 .title {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-size: 2rem;
   color: var(--color-heading);
   text-transform: uppercase;
   letter-spacing: 0.1em;

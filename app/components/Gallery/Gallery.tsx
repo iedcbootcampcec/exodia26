@@ -74,21 +74,38 @@ const Gallery = () => {
 
   useGSAP(
     () => {
-      // Per-letter staggered reveal - GPU optimized
+      // Letters start scrambled, come together on scroll
       if (titleRef.current) {
         const letters = titleRef.current.querySelectorAll("span");
-        gsap.set(letters, { opacity: 0 });
 
-        gsap.to(letters, {
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 80%",
-            end: "top 40%",
-            scrub: 1,
-          },
-          opacity: 1,
-          stagger: 0.03,
-          ease: "none",
+        letters.forEach((letter) => {
+          // Random scrambled positions
+          const randomX = (Math.random() - 0.5) * 100;
+          const randomY = (Math.random() - 0.5) * 60;
+          const randomRotate = (Math.random() - 0.5) * 30;
+
+          gsap.fromTo(
+            letter,
+            {
+              x: randomX,
+              y: randomY,
+              rotation: randomRotate,
+              opacity: 0,
+            },
+            {
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top 80%",
+                end: "top 40%",
+                scrub: 1,
+              },
+              x: 0,
+              y: 0,
+              rotation: 0,
+              opacity: 1,
+              ease: "none",
+            }
+          );
         });
       }
 
@@ -127,7 +144,7 @@ const Gallery = () => {
 
       <div className={styles.header} ref={headingRef}>
         <h2 className={styles.title} ref={titleRef}>
-          {"THE EXPERIENCE".split("").map((char, i) => (
+          {"GLIMPSES".split("").map((char, i) => (
             <span
               key={i}
               style={{ display: char === " " ? "inline" : "inline-block" }}

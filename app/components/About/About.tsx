@@ -31,7 +31,7 @@ const forums: ForumData[] = [
   },
   {
     id: 3,
-    name: "µLEARN CHN",
+    name: "µLearn CHN",
     content:
       "µLearn CHN is a vibrant, peer-driven community powered by GTech, dedicated to learning through mutual growth. Built on the philosophy of micro-learning and consistency, it offers a space where students can discover their interests, explore technology, engage in discussions, and learn skills that prepare them for real-world opportunities. We bring together curious minds for the exploration of new ideas, upskilling, and collaboration on impactful projects.\n\nRooted in micro-learning, challenges, mentorship, and hands-on experiences, we help students grow consistently at a personal and professional level. At µLearn CHN, curiosity becomes capability, and ideas become action.",
     logo: "/logos/mulearn.png",

@@ -74,39 +74,23 @@ const Gallery = () => {
 
   useGSAP(
     () => {
-      // Letters start scrambled, come together on scroll
+      // Animate whole title
       if (titleRef.current) {
-        const letters = titleRef.current.querySelectorAll("span");
-
-        letters.forEach((letter) => {
-          // Random scrambled positions
-          const randomX = (Math.random() - 0.5) * 100;
-          const randomY = (Math.random() - 0.5) * 60;
-          const randomRotate = (Math.random() - 0.5) * 30;
-
-          gsap.fromTo(
-            letter,
-            {
-              x: randomX,
-              y: randomY,
-              rotation: randomRotate,
-              opacity: 0,
+        gsap.fromTo(
+          titleRef.current,
+          { opacity: 0, y: 30 },
+          {
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              end: "top 50%",
+              scrub: 1,
             },
-            {
-              scrollTrigger: {
-                trigger: sectionRef.current,
-                start: "top 80%",
-                end: "top 40%",
-                scrub: 1,
-              },
-              x: 0,
-              y: 0,
-              rotation: 0,
-              opacity: 1,
-              ease: "none",
-            }
-          );
-        });
+            opacity: 1,
+            y: 0,
+            ease: "power2.out",
+          }
+        );
       }
 
       // Subtitle fade in
@@ -144,14 +128,7 @@ const Gallery = () => {
 
       <div className={styles.header} ref={headingRef}>
         <h2 className={styles.title} ref={titleRef}>
-          {"GLIMPSES".split("").map((char, i) => (
-            <span
-              key={i}
-              style={{ display: char === " " ? "inline" : "inline-block" }}
-            >
-              {char === " " ? "\u00A0" : char}
-            </span>
-          ))}
+          GLIMPSES
         </h2>
         <p className={styles.subtitle}>Moments from Previous Editions</p>
       </div>

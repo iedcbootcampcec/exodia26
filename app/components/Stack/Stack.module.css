@@ -11,6 +11,35 @@
   padding-top: 0;
 }
 
+/* Simple Gradient Background */
+.gradientMesh {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(131, 11, 7, 0.15) 0%,
+    transparent 60%
+  );
+}
+
+/* Giant 3.0 Background Text */
+.bgText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  font-family: var(--font-heading);
+  font-size: 35vw;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 204, 128, 0.06);
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
 .container {
   max-width: 1400px;
   width: 100%;
@@ -33,6 +62,11 @@
   color: var(--color-accent);
   letter-spacing: 0.1em;
   margin: 0;
+}
+
+.letter {
+  opacity: 0;
+  transform: rotateX(-90deg) translateY(40px);
 }
 
 .grid {

@@ -71,13 +71,22 @@ const Navbar = () => {
             <li style={{ "--i": 3 } as React.CSSProperties}>
               <a
                 className={styles.navLink}
+                onClick={() => handleSection("gallery")}
+                data-text="Gallery"
+              >
+                Gallery
+              </a>
+            </li>
+            <li style={{ "--i": 4 } as React.CSSProperties}>
+              <a
+                className={styles.navLink}
                 onClick={() => handleSection("faq")}
                 data-text="FAQ"
               >
                 FAQ
               </a>
             </li>
-            <li style={{ "--i": 4 } as React.CSSProperties}>
+            <li style={{ "--i": 5 } as React.CSSProperties}>
               <a
                 className={styles.navLink}
                 onClick={() => handleSection("contact")}

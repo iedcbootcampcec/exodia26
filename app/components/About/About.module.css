@@ -1,339 +1,306 @@
 .section {
-  padding: 10rem 2rem;
+  padding: 8rem 2rem;
+  min-height: 100vh;
   display: flex;
+  align-items: center;
   justify-content: center;
   position: relative;
-  min-height: 100vh;
   overflow: hidden;
-  contain: content;
 }
 
-.topGradient {
+/* Radial Gradient Glow */
+.gradientBg {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 150px;
-  background: linear-gradient(to bottom, var(--color-bg) 0%, transparent 100%);
+  inset: 0;
+  z-index: 0;
   pointer-events: none;
-  z-index: 10;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 204, 128, 0.08) 0%,
+    transparent 55%
+  );
 }
 
-.container {
+/* Giant Background */
+.bgText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-heading);
+  font-size: 20vw;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 204, 128, 0.05);
+  letter-spacing: 0.1em;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+/* Wrapper - Two column */
+.wrapper {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 6rem;
   max-width: 1200px;
   width: 100%;
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 8rem;
   align-items: start;
 }
 
-.header {
-  position: sticky;
-  top: 10rem;
-  /* Optimization: Hints browser to promote this to a new layer */
-  will-change: transform, opacity;
+/* Main Content - Left */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.eyebrow {
+  font-family: var(--font-variable);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: var(--color-text-dim);
 }
 
 .title {
   font-family: var(--font-heading);
-  font-size: 4rem;
-  line-height: 0.85;
-  color: var(--color-accent);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.highlight {
-  display: block;
-  color: var(--color-accent);
-  margin-top: 0.5rem;
   font-size: 5.5rem;
-  position: relative;
-  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+  min-height: 1.2em;
 }
 
-.contentWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
-  /* Optimization: Hints browser for incoming animation */
-  will-change: transform, opacity;
+.tagline {
+  font-family: var(--font-variable);
+  font-size: 1.1rem;
+  color: var(--color-text);
+  margin-top: 0.5rem;
+  font-style: italic;
 }
 
 .description {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  font-family: var(--font-variable);
-  font-size: 1.15rem;
-  line-height: 1.8;
-  color: var(--color-text);
-  border-left: 4px solid var(--color-accent);
-  padding-left: 2rem;
-  position: relative;
-  /* Optimization: Creates a new stacking context */
-  isolation: isolate;
-}
-
-.description::before {
-  content: "";
-  position: absolute;
-  left: -4px;
-  top: 0;
-  width: 4px;
-  height: 100%; /* Set full height initially */
-  background: var(--color-primary);
-  /* Optimization: Use transform scale instead of animating height */
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: 1;
-  will-change: transform;
-}
-
-.description:hover::before {
-  /* Optimization: GPU efficient animation */
-  transform: scaleY(1);
+  gap: 1.5rem;
 }
 
 .description p {
-  opacity: 0;
-  transform: translateX(20px);
-  animation: fadeInText 0.6s ease forwards;
+  font-family: var(--font-variable);
+  font-size: 1.15rem;
+  line-height: 1.85;
+  color: var(--color-text);
 }
 
-.description p:nth-child(1) {
-  animation-delay: 0.1s;
+.word {
+  display: inline;
+  opacity: 0.15;
+  transition: opacity 0.1s ease;
 }
 
-.description p:nth-child(2) {
-  animation-delay: 0.3s;
-}
-
-.description p:nth-child(3) {
-  animation-delay: 0.5s;
-}
-
-@keyframes fadeInText {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.link {
+.description strong {
   color: var(--color-accent);
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-  position: relative;
-  padding: 0 4px;
-  transition: color 0.3s ease;
-  display: inline-block; /* Required for transform logic to work reliably */
+  font-weight: 600;
 }
 
-.link::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--color-accent);
-  /* Optimization: Use scaleX instead of width/background-size */
-  transform: scaleX(1);
-  transform-origin: right;
-  transition: transform 0.3s ease;
+.description em {
+  color: var(--color-text);
+  font-style: normal;
+  font-weight: 500;
 }
 
-.link:hover {
-  color: var(--color-primary);
+/* Sidebar - Right */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-top: 1rem;
 }
 
-.link:hover::before {
-  background: var(--color-primary);
-  transform: scaleX(0);
-  transform-origin: right;
-}
-
+/* Stats */
 .stats {
   display: flex;
-  align-items: stretch;
-  gap: 0;
-  overflow: hidden;
-  position: relative;
-  padding: 1rem 0;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  border-left: 2px solid rgba(255, 204, 128, 0.2);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 204, 128, 0.03) 0%,
+    transparent 100%
+  );
 }
 
-.statItem {
-  flex: 1;
+.statRow {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.statNum {
+  font-family: var(--font-body);
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--color-accent);
+  min-width: 80px;
+  font-weight: 900;
+}
+
+.statText {
+  font-family: var(--font-variable);
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.05em;
+}
+
+/* Forums Section */
+.forums {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.forumsLabel {
+  font-family: var(--font-variable);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+}
+
+.forumsList {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding: 2.5rem 2rem;
+}
+
+.forumItem {
+  display: flex;
   align-items: center;
-  position: relative;
-  transition: transform 0.3s ease;
-  will-change: transform, opacity;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.statItem:hover {
-  transform: translateY(-6px);
+.forumItem:hover {
+  background: rgba(255, 204, 128, 0.05);
+  border-color: rgba(255, 204, 128, 0.2);
+  transform: translateX(8px);
 }
 
-.statItem:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: 15%;
-  width: 2px;
-  height: 70%;
-  background: var(--color-accent);
+.forumItem img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
 }
 
-.statNumber {
+.forumItem:hover img {
+  opacity: 1;
+}
+
+.forumItem span {
   font-family: var(--font-variable);
-  font-size: 5.5rem;
-  line-height: 1;
-  font-weight: 900;
-  color: var(--color-accent);
-  transition: transform 0.3s ease, text-shadow 0.3s ease;
-  will-change: transform;
-  /* Subtle glow */
-  text-shadow: 0 0 30px rgba(var(--color-accent-rgb, 255, 107, 53), 0.4);
-}
-
-.statItem:hover .statNumber {
-  transform: scale(1.15);
-  text-shadow: 0 0 40px rgba(var(--color-accent-rgb, 255, 107, 53), 0.6);
-}
-
-.statLabel {
-  font-family: var(--font-variable);
-  font-size: 0.9rem;
-  letter-spacing: 0.2em;
+  font-size: 0.85rem;
+  font-weight: 600;
   color: var(--color-text);
-  font-weight: 700;
-  text-transform: uppercase;
-  transition: color 0.3s ease, letter-spacing 0.3s ease;
-  opacity: 0.9;
-}
-
-.statItem:hover .statLabel {
-  color: var(--color-accent);
-  letter-spacing: 0.25em;
-}
-
-.statDivider {
-  display: none;
+  letter-spacing: 0.05em;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .container {
+  .wrapper {
     grid-template-columns: 1fr;
-    gap: 5rem;
-  }
-
-  .header {
-    position: static;
+    gap: 4rem;
   }
 
   .title {
-    font-size: 4rem;
-  }
-
-  .highlight {
     font-size: 4.5rem;
   }
 
-  .highlight::after {
-    font-size: 5rem;
+  .sidebar {
+    flex-direction: row;
+    gap: 3rem;
+  }
+
+  .stats {
+    flex: 1;
+  }
+
+  .forums {
+    flex: 1;
   }
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 6rem 1.5rem;
+    padding: 5rem 1.5rem;
   }
 
-  .container {
-    gap: 4rem;
+  .bgText {
+    font-size: 30vw;
+    top: 20%;
+    transform: translate(-50%, 100%);
   }
 
   .title {
-    font-size: 3rem;
-  }
-
-  .highlight {
     font-size: 3.5rem;
-    margin-top: 0.3rem;
   }
 
-  .highlight::after {
-    font-size: 4rem;
-    right: -0.7rem;
-  }
-
-  .description {
+  .tagline {
     font-size: 1rem;
-    padding-left: 1.5rem;
   }
 
-  .stats {
+  .description p {
+    font-size: 1rem;
+  }
+
+  .sidebar {
     flex-direction: column;
-    gap: 0;
-    padding: 0.5rem 0;
+    gap: 2rem;
   }
 
-  .statItem {
-    padding: 1.75rem 1.5rem;
+  .statNum {
+    font-size: 2.75rem;
+    min-width: 60px;
   }
 
-  .statItem:not(:last-child)::after {
-    width: 60%;
-    height: 2px;
-    top: auto;
-    bottom: 0;
-    left: 20%;
+  .forumItem {
+    padding: 0.875rem 1rem;
   }
 
-  .statNumber {
-    font-size: 4rem;
-  }
-
-  .statLabel {
-    font-size: 0.8rem;
+  .forumItem img {
+    width: 32px;
+    height: 32px;
   }
 }
 
 @media (max-width: 480px) {
-  .section {
-    padding: 5rem 1rem;
-  }
-
   .title {
-    font-size: 2.5rem;
+    font-size: 2.75rem;
   }
 
-  .highlight {
-    font-size: 3rem;
+  .statNum {
+    font-size: 2.25rem;
+    min-width: 50px;
   }
 
-  .highlight::after {
-    font-size: 3.5rem;
-    right: -0.5rem;
-  }
-
-  .description {
-    font-size: 0.95rem;
-    padding-left: 1rem;
-    border-left-width: 3px;
-  }
-
-  .statNumber {
-    font-size: 3.5rem;
+  .stats {
+    padding: 1.5rem;
   }
 }
 
@@ -344,26 +311,45 @@
   align-items: center;
   text-align: center;
   gap: 1.5rem;
-  color: var(--color-white);
+  padding: 2.5rem 2rem;
 }
 
 .modalLogo {
-  height: 80px;
+  height: 100px;
   width: auto;
-  filter: brightness(0.8) sepia(1) hue-rotate(-10deg) saturate(3);
+  margin-bottom: 0.5rem;
 }
 
 .modalHeading {
   font-family: var(--font-heading);
-  font-size: 2rem;
-  color: var(--color-primary);
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  letter-spacing: 0.05em;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.modalHeading::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent),
+    transparent
+  );
 }
 
 .modalText {
   font-family: var(--font-variable);
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--color-text);
-  text-align: justify;
-  padding: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  max-width: 450px;
 }

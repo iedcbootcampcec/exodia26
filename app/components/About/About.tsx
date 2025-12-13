@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { TextPlugin } from "gsap/TextPlugin";
 import Modal from "../Modal/Modal";
 import styles from "./About.module.css";
 
@@ -37,26 +38,41 @@ const forums: ForumData[] = [
   },
 ];
 
-// Register ScrollTrigger once
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, TextPlugin);
 }
+
+// Helper component to wrap words in spans
+const RevealText = ({
+  children,
+  className,
+}: {
+  children: string;
+  className?: string;
+}) => {
+  return (
+    <span className={className}>
+      {children.split(" ").map((word, i) => (
+        <span key={i} className={styles.word}>
+          {word}{" "}
+        </span>
+      ))}
+    </span>
+  );
+};
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
+  const bgTextRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLSpanElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedForum, setSelectedForum] = useState<ForumData | null>(null);
 
-  const handleForumClick = (id: number) => {
-    const forum = forums[id];
-    if (forum) {
-      setSelectedForum(forum);
-      setIsModalVisible(true);
-    }
+  const handleForumClick = (forum: ForumData) => {
+    setSelectedForum(forum);
+    setIsModalVisible(true);
   };
 
   const closeModal = () => {
@@ -65,86 +81,76 @@ const About = () => {
 
   useGSAP(
     () => {
-      // Header animation - slide and border grow
-      gsap.fromTo(
-        headingRef.current,
-        {
-          x: -50,
-          opacity: 0,
-          scale: 0.95,
-        },
-        {
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 70%",
-            end: "top 30%",
-            scrub: 0.5, // Reduced scrub for snappier response
-          },
-          x: 0,
-          opacity: 1,
-          scale: 1,
-          force3D: true, // Force GPU layer
-          ease: "power2.out",
-        }
-      );
-
-      // Content animation - slide from right
-      gsap.fromTo(
-        contentRef.current,
-        {
-          x: 50,
-          opacity: 0,
-        },
-        {
-          scrollTrigger: {
-            trigger: contentRef.current,
-            start: "top 80%",
-            end: "top 40%",
-            scrub: 0.5,
-          },
-          x: 0,
-          opacity: 1,
-          force3D: true,
-          ease: "power2.out",
-        }
-      );
-
-      // Parallax on header - reduced range to minimize jitter
-      gsap.to(headingRef.current, {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0, // Zero scrub prevents floating effect on fast scrolls
-        },
-        y: -50,
-        force3D: true,
-        ease: "none",
-      });
-
-      // Stats animation - slide up with stagger
-      const statItems = statsRef.current?.querySelectorAll(".statItem");
-      if (statItems) {
+      // Background text
+      if (bgTextRef.current) {
         gsap.fromTo(
-          statItems,
-          {
-            y: 40,
-            opacity: 0,
-            scale: 0.95,
-          },
+          bgTextRef.current,
+          { text: "" },
           {
             scrollTrigger: {
-              trigger: statsRef.current,
+              trigger: sectionRef.current,
               start: "top 85%",
-              end: "top 55%",
-              scrub: 0.5,
-            },
+              end: "top 40%",
+              scrub: 1,
+            } as ScrollTrigger.Vars,
+            text: "EXODIA",
+            ease: "none",
+          }
+        );
+      }
+
+      // Title
+      if (titleRef.current) {
+        gsap.fromTo(
+          titleRef.current,
+          { text: "" },
+          {
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              end: "top 35%",
+              scrub: 1,
+            } as ScrollTrigger.Vars,
+            text: "EXODIA ?",
+            ease: "none",
+          }
+        );
+      }
+
+      // Word-by-word reveal animation
+      const words = descriptionRef.current?.querySelectorAll("." + styles.word);
+      if (words && words.length > 0) {
+        gsap.set(words, { opacity: 0.15 });
+        gsap.to(words, {
+          scrollTrigger: {
+            trigger: descriptionRef.current,
+            start: "top 80%",
+            end: "bottom 40%",
+            scrub: 1,
+          } as ScrollTrigger.Vars,
+          opacity: 1,
+          stagger: 0.02,
+          ease: "none",
+        });
+      }
+
+      // Animate other blocks
+      const blocks = sectionRef.current?.querySelectorAll("[data-animate]");
+      if (blocks) {
+        gsap.fromTo(
+          blocks,
+          { y: 50, opacity: 0 },
+          {
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 70%",
+              end: "top 20%",
+              scrub: 1.5,
+            } as ScrollTrigger.Vars,
             y: 0,
             opacity: 1,
-            scale: 1,
             stagger: 0.1,
             force3D: true,
-            ease: "power2.out",
           }
         );
       }
@@ -154,61 +160,103 @@ const About = () => {
 
   return (
     <section className={styles.section} ref={sectionRef} id="about">
-      <div className={styles.topGradient}></div>
-      <div className={styles.container}>
-        <div className={styles.header} ref={headingRef}>
-          <h2 className={styles.title}>
-            WHAT IS <br />
-            <span className={styles.highlight}>EXODIA?</span>
-          </h2>
-        </div>
+      {/* Radial Gradient Glow */}
+      <div className={styles.gradientBg}></div>
 
-        <div className={styles.contentWrapper} ref={contentRef}>
-          <div className={styles.description}>
+      {/* Giant Background */}
+      <div className={styles.bgText} ref={bgTextRef}></div>
+
+      <div className={styles.wrapper}>
+        {/* Left - Main Content */}
+        <div className={styles.main}>
+          <div className={styles.titleBlock} data-animate>
+            <span className={styles.eyebrow}>WHAT IS</span>
+            <h2 className={styles.title}>
+              <span ref={titleRef}></span>
+            </h2>
+            <p className={styles.tagline}>A Tech Gala Like No Other</p>
+          </div>
+
+          <div className={styles.description} ref={descriptionRef}>
             <p>
-              Exodia 3.0 brings together innovators from across Kerala for a
-              hands-on technical meet on February 7th and 8th at the College of
-              Engineering Chengannur.
+              <RevealText>
+                Exodia 3.0 brings together innovators from across Kerala for a
+                hands-on technical meet on February 7th and 8th at the College
+                of Engineering Chengannur.
+              </RevealText>
             </p>
             <p>
-              Organised by{" "}
-              <span className={styles.link} onClick={() => handleForumClick(0)}>
+              <RevealText>Organised by</RevealText>{" "}
+              <span
+                className={`${styles.link} ${styles.word}`}
+                onClick={() => handleForumClick(forums[0])}
+              >
                 IEDC BOOTCAMP CEC
               </span>
               ,{" "}
-              <span className={styles.link} onClick={() => handleForumClick(1)}>
+              <span
+                className={`${styles.link} ${styles.word}`}
+                onClick={() => handleForumClick(forums[1])}
+              >
                 FOCES CEC
               </span>
-              , and{" "}
-              <span className={styles.link} onClick={() => handleForumClick(2)}>
+              , <RevealText>and</RevealText>{" "}
+              <span
+                className={`${styles.link} ${styles.word}`}
+                onClick={() => handleForumClick(forums[2])}
+              >
                 μLearn CHN
               </span>
-              , the event is designed to provide participants with practical
-              exposure through structured learning experiences and collaborative
-              sessions.
+              ,{" "}
+              <RevealText>
+                the event is designed to provide participants with practical
+                exposure through structured learning experiences and
+                collaborative sessions.
+              </RevealText>
             </p>
             <p>
-              The event features hands-on workshops in Robotics, Data Science
-              with Machine Learning, and Computer Vision, led by experienced
-              mentors, with an emphasis on skill development, professional
-              networking, and innovation.
+              <RevealText>
+                The event features hands-on workshops in Robotics, Data Science
+                with Machine Learning, and Computer Vision, led by experienced
+                mentors, with an emphasis on skill development, professional
+                networking, and innovation.
+              </RevealText>
             </p>
           </div>
+        </div>
 
-          <div className={styles.stats} ref={statsRef}>
-            <div className={`${styles.statItem} statItem`}>
-              <span className={styles.statNumber}>3</span>
-              <span className={styles.statLabel}>STACKS</span>
+        {/* Right - Stats + Forums */}
+        <div className={styles.sidebar}>
+          {/* Stats */}
+          <div className={styles.stats} data-animate>
+            <div className={styles.statRow}>
+              <span className={styles.statNum}>3</span>
+              <span className={styles.statText}>Tech Stacks</span>
             </div>
-            <div className={styles.statDivider}></div>
-            <div className={`${styles.statItem} statItem`}>
-              <span className={styles.statNumber}>180</span>
-              <span className={styles.statLabel}>STUDENTS</span>
+            <div className={styles.statRow}>
+              <span className={styles.statNum}>180</span>
+              <span className={styles.statText}>Participants</span>
             </div>
-            <div className={styles.statDivider}></div>
-            <div className={`${styles.statItem} statItem`}>
-              <span className={styles.statNumber}>2</span>
-              <span className={styles.statLabel}>DAYS</span>
+            <div className={styles.statRow}>
+              <span className={styles.statNum}>2</span>
+              <span className={styles.statText}>Days of Innovation</span>
+            </div>
+          </div>
+
+          {/* Forums */}
+          <div className={styles.forums} data-animate>
+            <span className={styles.forumsLabel}>Organised by</span>
+            <div className={styles.forumsList}>
+              {forums.map((forum) => (
+                <div
+                  key={forum.id}
+                  className={styles.forumItem}
+                  onClick={() => handleForumClick(forum)}
+                >
+                  <img src={forum.logo} alt={forum.name} />
+                  <span>{forum.name.split(" ")[0]}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -221,6 +269,7 @@ const About = () => {
               src={selectedForum.logo}
               alt={selectedForum.name}
               className={styles.modalLogo}
+              style={selectedForum.id === 2 ? { height: "60px" } : {}}
             />
             <h3 className={styles.modalHeading}>{selectedForum.name}</h3>
             <p className={styles.modalText}>

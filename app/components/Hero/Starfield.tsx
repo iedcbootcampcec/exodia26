@@ -11,6 +11,7 @@ interface Star {
 
 const Starfield = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isVisibleRef = useRef(true); // Track visibility
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -23,41 +24,43 @@ const Starfield = () => {
     let stars: Star[] = [];
 
     const resizeCanvas = () => {
-      // Set actual canvas size to match display size for crisp pixels
       const { width, height } = canvas.getBoundingClientRect();
-      // Multiply by devicePixelRatio for sharp rendering on retina screens
       const dpr = window.devicePixelRatio || 1;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.scale(dpr, dpr);
-      
+
       initStars(width, height);
     };
 
     const initStars = (width: number, height: number) => {
-      // Denser star count to match the original CSS shadow density
-      const starCount = width < 768 ? 200 : 400; 
+      const starCount = width < 768 ? 150 : 300; // Reduced star count
       stars = [];
       for (let i = 0; i < starCount; i++) {
         stars.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          size: Math.random() < 0.5 ? 1 : 0.5, // Mostly 0.5px or 1px (very fine)
-          speed: Math.random() * 0.2 + 0.05, // Very slow movement
-          opacity: Math.random() * 0.5 + 0.1, // Max opacity 0.6
+          size: Math.random() < 0.5 ? 1 : 0.5,
+          speed: Math.random() * 0.2 + 0.05,
+          opacity: Math.random() * 0.5 + 0.1,
         });
       }
     };
 
     const animate = () => {
+      // Skip animation when not visible - frees up resources during scroll
+      if (!isVisibleRef.current) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+
       const { width, height } = canvas.getBoundingClientRect();
       ctx.clearRect(0, 0, width, height);
-      
+
       stars.forEach((star) => {
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         ctx.beginPath();
-        // Rectangles render slightly sharper/faster for tiny 1px stars than circles
-        ctx.rect(star.x, star.y, star.size, star.size); 
+        ctx.rect(star.x, star.y, star.size, star.size);
         ctx.fill();
 
         star.y -= star.speed;
@@ -71,6 +74,18 @@ const Starfield = () => {
       animationFrameId = requestAnimationFrame(animate);
     };
 
+    // Intersection Observer to pause animation when out of view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisibleRef.current = entry.isIntersecting;
+        });
+      },
+      { threshold: 0, rootMargin: "100px" } // Small margin for smoother transition
+    );
+
+    observer.observe(canvas);
+
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
     animate();
@@ -78,6 +93,7 @@ const Starfield = () => {
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
     };
   }, []);
 

@@ -7,6 +7,35 @@
   align-items: center;
   position: relative;
   overflow: hidden;
+  padding-top: 0;
+}
+
+/* Radial Gradient Glow */
+.gradientBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 204, 128, 0.08) 0%,
+    transparent 50%
+  );
+}
+
+/* Giant ? Background */
+.bgText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-heading);
+  font-size: 50vw;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 204, 128, 0.04);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
 }
 
 .heading {

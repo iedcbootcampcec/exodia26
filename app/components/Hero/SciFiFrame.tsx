@@ -1,4 +1,4 @@
-import styles from './SciFiFrame.module.css';
+import styles from "./SciFiFrame.module.css";
 
 const SciFiFrame = () => {
   return (

@@ -1,5 +1,5 @@
 import styles from "./CitySkyline.module.css";
-import Starfield from "./Starfield"; 
+import Starfield from "./Starfield";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import gsap from "gsap";
@@ -15,62 +15,68 @@ const CitySkyline = () => {
   const centerRef = useRef<HTMLImageElement>(null);
   const atmosphereRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    if (!containerRef.current) return;
+  useGSAP(
+    () => {
+      if (!containerRef.current) return;
 
-    // Slower, zoom-in dolly effect - camera pushes forward into the scene
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: "+=1200",
-        scrub: 1,
-      },
-    });
+      // Pre-warm GPU layers on mount to prevent first-scroll jank
+      const elements = [
+        sunRef.current,
+        atmosphereRef.current,
+        leftRef.current,
+        rightRef.current,
+        centerRef.current,
+      ].filter(Boolean);
 
-    // Sun - subtle zoom and fade (far background)
-    timeline.to(sunRef.current, {
-      y: 50,
-      scale: 1.2,
-      opacity: 0.6,
-      ease: "none",
-    }, 0);
+      gsap.set(elements, { force3D: true, willChange: "transform" });
 
-    // Atmosphere - gentle shift
-    timeline.to(atmosphereRef.current, {
-      y: 40,
-      scale: 1.1,
-      opacity: 0.6,
-      ease: "none",
-    }, 0);
+      // Optimized dolly effect with faster scroll handling
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "+=800",
+          scrub: 2,
+          fastScrollEnd: true,
+          invalidateOnRefresh: true,
+        } as ScrollTrigger.Vars,
+      });
 
-    // Left building - zoom in with outward push
-    timeline.to(leftRef.current, {
-      y: 80,
-      x: -120,
-      scale: 1.4,
-      rotationY: -2,
-      ease: "none",
-    }, 0);
+      // Combine sun and atmosphere into simpler transforms
+      timeline.to(
+        sunRef.current,
+        { y: 40, scale: 1.15, opacity: 0.7, ease: "none", force3D: true },
+        0
+      );
 
-    // Right building - zoom in with outward push
-    timeline.to(rightRef.current, {
-      y: 80,
-      x: 120,
-      scale: 1.4,
-      rotationY: 2,
-      ease: "none",
-    }, 0);
+      timeline.to(
+        atmosphereRef.current,
+        { y: 30, opacity: 0.7, ease: "none", force3D: true },
+        0
+      );
 
-    // Center spire - largest zoom (camera moves toward it)
-    timeline.to(centerRef.current, {
-      y: 120,
-      scale: 1.8,
-      z: 150,
-      ease: "none",
-    }, 0);
+      // Simplified building animations
+      timeline.to(
+        leftRef.current,
+        { y: 60, x: -80, scale: 1.3, ease: "none", force3D: true },
+        0
+      );
 
-  }, { scope: containerRef });
+      timeline.to(
+        rightRef.current,
+        { y: 60, x: 80, scale: 1.3, ease: "none", force3D: true },
+        0
+      );
+
+      // Center spire
+      timeline.to(
+        centerRef.current,
+        { y: 80, scale: 1.5, ease: "none", force3D: true },
+        0
+      );
+    },
+    { scope: containerRef }
+  );
 
   return (
     <div ref={containerRef} className={styles.skylineContainer}>

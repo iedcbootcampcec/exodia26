@@ -67,28 +67,51 @@ const Stack = () => {
 
   useGSAP(
     () => {
-      // Heading Animation: TextPlugin typewriter effect
+      // Pre-warm GPU layers on mount to prevent first-scroll jank
       if (headingRef.current) {
-        // First set initial state
-        gsap.set(headingRef.current, { opacity: 1 });
+        gsap.set(headingRef.current, {
+          opacity: 1,
+          force3D: true,
+          willChange: "transform, opacity",
+        });
+      }
 
-        gsap.fromTo(
-          headingRef.current,
-          {
-            text: "",
-            opacity: 1,
-          },
-          {
+      if (gridRef.current && gridRef.current.children.length > 0) {
+        const cards = Array.from(gridRef.current.children);
+        gsap.set(cards, {
+          force3D: true,
+          willChange: "transform, opacity",
+        });
+      }
+
+      // Heading Animation: Per-letter staggered reveal (GPU-accelerated)
+      if (headingRef.current) {
+        const letters = headingRef.current.querySelectorAll(
+          "." + styles.letter
+        );
+        if (letters.length > 0) {
+          gsap.set(letters, {
+            force3D: true,
+            willChange: "transform, opacity",
+          });
+
+          gsap.to(letters, {
             scrollTrigger: {
               trigger: headingRef.current,
               start: "top 85%",
-              end: "top 50%",
-              scrub: 1,
-            },
-            text: "STACKS",
-            ease: "none",
-          }
-        );
+              end: "top 55%",
+              scrub: 1.5,
+              fastScrollEnd: true,
+              invalidateOnRefresh: true,
+            } as ScrollTrigger.Vars,
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            stagger: 0.08,
+            force3D: true,
+            ease: "power2.out",
+          });
+        }
       }
 
       // Cards Animation: Scrub-based staggered reveal
@@ -99,21 +122,24 @@ const Stack = () => {
           gsap.fromTo(
             card,
             {
-              y: 100,
+              y: 80,
               opacity: 0,
-              scale: 0.9,
+              scale: 0.95,
             },
             {
               scrollTrigger: {
                 trigger: card,
                 start: "top 95%",
-                end: "top 50%",
-                scrub: 1,
-              },
+                end: "top 60%",
+                scrub: 1.5,
+                fastScrollEnd: true,
+                invalidateOnRefresh: true,
+              } as ScrollTrigger.Vars,
               y: 0,
               opacity: 1,
               scale: 1,
-              ease: "none",
+              force3D: true,
+              ease: "power2.out",
             }
           );
         });
@@ -132,10 +158,24 @@ const Stack = () => {
 
   return (
     <section ref={sectionRef} className={styles.stackSection} id="stack">
+      {/* Gradient Background */}
+      <div className={styles.gradientMesh}></div>
+
+      {/* Giant 3.0 Background Text */}
+      <div className={styles.bgText}>3.0</div>
+
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 ref={headingRef} className={styles.title}>
-            STACKS
+            {"STACKS".split("").map((letter, i) => (
+              <span
+                key={i}
+                className={styles.letter}
+                style={{ display: "inline-block" }}
+              >
+                {letter}
+              </span>
+            ))}
           </h2>
         </div>
 

@@ -166,6 +166,12 @@ const FAQ = () => {
 
   return (
     <section className={styles.faqSection} id="faq" ref={sectionRef}>
+      {/* Radial Gradient Glow */}
+      <div className={styles.gradientBg}></div>
+
+      {/* Giant ? Background */}
+      <div className={styles.bgText}>?</div>
+
       <h2 className={styles.heading} ref={headingRef}>
         {"FAQ".split("").map((letter, i) => (
           <span key={i} className={styles.letter}>

@@ -4,10 +4,11 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { TextPlugin } from "gsap/TextPlugin";
 import styles from "./Gallery.module.css";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, TextPlugin);
 }
 
 // Image data with size variants for visual variety
@@ -66,52 +67,32 @@ const getSizeClass = (size: string) => {
   }
 };
 
-// Split title into letters for animation
-const titleText = "THE EXPERIENCE";
-
 const Gallery = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
-  const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   useGSAP(
     () => {
-      // Letters animation - come together from spread positions
-      const letters = lettersRef.current.filter(Boolean);
-
-      letters.forEach((letter, index) => {
-        // Calculate spread offset - letters spread outward from center
-        const centerIndex = letters.length / 2;
-        const distanceFromCenter = index - centerIndex;
-        const spreadX = distanceFromCenter * 40; // Spread amount
-        const spreadY = (Math.random() - 0.5) * 60; // Random vertical offset
-
+      // Title typewriter animation
+      if (titleRef.current) {
         gsap.fromTo(
-          letter,
-          {
-            x: spreadX,
-            y: spreadY,
-            opacity: 0,
-            scale: 0.8,
-            rotateZ: (Math.random() - 0.5) * 20,
-          },
+          titleRef.current,
+          { text: "" },
           {
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 80%",
               end: "top 40%",
-              scrub: 0.5,
+              scrub: 1,
             },
-            x: 0,
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            rotateZ: 0,
-            ease: "power2.out",
+            text: "THE EXPERIENCE",
+            ease: "none",
           }
         );
-      });
+      }
 
+      // Subtitle fade in
       if (headingRef.current) {
         gsap.fromTo(
           headingRef.current?.querySelector(`.${styles.subtitle}`),
@@ -145,19 +126,7 @@ const Gallery = () => {
       <div className={styles.bgText}>2.0</div>
 
       <div className={styles.header} ref={headingRef}>
-        <h2 className={styles.title}>
-          {titleText.split("").map((char, index) => (
-            <span
-              key={index}
-              ref={(el) => {
-                lettersRef.current[index] = el;
-              }}
-              className={`${styles.letter} ${char === " " ? styles.space : ""}`}
-            >
-              {char === " " ? "\u00A0" : char}
-            </span>
-          ))}
-        </h2>
+        <h2 className={styles.title} ref={titleRef}></h2>
         <p className={styles.subtitle}>Moments from Previous Editions</p>
       </div>
 

@@ -45,24 +45,13 @@
 
 .title {
   font-family: var(--font-heading);
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(2.5rem, 8vw, 5rem);
   color: var(--color-heading);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   margin: 0;
   text-shadow: 0 0 60px rgba(131, 11, 7, 0.3);
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.letter {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
-.space {
-  width: 0.3em;
+  min-height: 1.2em;
 }
 
 .subtitle {

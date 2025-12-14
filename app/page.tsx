@@ -19,27 +19,27 @@ const Images = [
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const preloadImages = () => {
+      const promises = Images.map((src) => {
+        return new Promise<void>((resolve, reject) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = () => resolve();
+          img.onerror = () => reject();
+        });
+      });
 
-  // useEffect(() => {
-  //   const preloadImages = () => {
-  //     const promises = Images.map((src) => {
-  //       return new Promise<void>((resolve, reject) => {
-  //         const img = new Image();
-  //         img.src = src;
-  //         img.onload = () => resolve();
-  //         img.onerror = () => reject();
-  //       });
-  //     });
+      try {
+        Promise.all(promises);
+      } catch (error) {
+        console.error("Error preloading images", error);
+      }
+    };
 
-  //     try {
-  //       Promise.all(promises);
-  //     } catch (error) {
-  //       console.error("Error preloading images", error);
-  //     }
-  //   };
-
-  //   preloadImages();
-  // }, []);
+    preloadImages();
+  }, []);
 
   return (
     <>

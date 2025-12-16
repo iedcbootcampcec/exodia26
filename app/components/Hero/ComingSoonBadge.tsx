@@ -8,36 +8,36 @@ import Modal from "../Modal/Modal";
 // Early Bird Sold Out badge component
 // 7:00 PM 16th december 2025 Asia/Kolkata
 
-const checkIfIsTime = () => {
-  const eventDate = new Date("2025-12-16T19:00:00"); // 7:00 PM IST
-  const now = new Date();
-  return now >= eventDate;
-};
+// const checkIfIsTime = () => {
+//   const eventDate = new Date("2025-12-16T19:00:00"); // 7:00 PM IST
+//   const now = new Date();
+//   return now >= eventDate;
+// };
 
 const URI = "https://makemypass.com/event/exodia26";
 
 const ComingSoonBadge = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isTheTime, setIsTheTime] = useState(checkIfIsTime());
+  // const [isTheTime, setIsTheTime] = useState(checkIfIsTime());
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!isTheTime) return;
+    // if (!isTheTime) return;
     window.open(URI, "_blank");
     // setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIsTheTime(() => {
-        const res = checkIfIsTime();
-        if (res) clearInterval(timer);
-        return res;
-      });
-    }, 1000); // check every second
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setIsTheTime(() => {
+  //       const res = checkIfIsTime();
+  //       if (res) clearInterval(timer);
+  //       return res;
+  //     });
+  //   }, 1000); // check every second
 
-    return () => clearInterval(timer);
-  }, []);
+  //   return () => clearInterval(timer);
+  // }, []);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -46,9 +46,7 @@ const ComingSoonBadge = () => {
   return (
     <>
       <div className={styles.container} onClick={handleClick}>
-        <span className={styles.text}>
-          {isTheTime ? "REGISTER NOW" : "EARLY BIRD SOLD OUT"}
-        </span>
+        <span className={styles.text}>REGISTER NOW</span>
       </div>
 
       <Modal isVisible={isModalOpen} onClose={handleCloseModal}>

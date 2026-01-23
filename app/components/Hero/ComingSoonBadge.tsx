@@ -23,7 +23,7 @@ const ComingSoonBadge = () => {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     // if (!isTheTime) return;
-    window.open(URI, "_blank");
+    //window.open(URI, "_blank");
     // setIsModalOpen(true);
   };
 
@@ -46,7 +46,7 @@ const ComingSoonBadge = () => {
   return (
     <>
       <div className={styles.container} onClick={handleClick}>
-        <span className={styles.text}>REGISTER NOW</span>
+        <span className={styles.text}>REGISTRATION CLOSED</span>
       </div>
 
       <Modal isVisible={isModalOpen} onClose={handleCloseModal}>
